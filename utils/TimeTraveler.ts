@@ -1,4 +1,4 @@
-import {EthereumProvider} from "hardhat/types";
+import { EthereumProvider } from "hardhat/types";
 
 class TimeTraveler {
   private snapshotID: any;

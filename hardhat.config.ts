@@ -15,7 +15,7 @@ import { NetworkUserConfig } from "hardhat/types";
 dotenvConfig({ path: resolve(__dirname, "./.env") });
 
 // When compiling don't import non existing artifacts
-if(!process.env.COMPILE_ONLY) {
+if (!process.env.COMPILE_ONLY) {
   require("./tasks/deployers");
 }
 

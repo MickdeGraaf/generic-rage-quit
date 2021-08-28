@@ -20,32 +20,30 @@ contract RageQuit is ReentrancyGuard, Context {
         vault = _vault;
     }
 
-
     function rageQuit(uint256 _quitAmount, address[] calldata _tokens) external nonReentrant {
         // TODO burn tokens (or transfer them to 0x000....0 address)
         rageQuitToken.transferFrom(_msgSender(), vault, _quitAmount);
 
-
         uint256[] memory tokenAmounts = new uint256[](_tokens.length);
 
-        for(uint256 i = 0; i < _tokens.length; i ++) {
+        for (uint256 i = 0; i < _tokens.length; i++) {
             require(_tokens[i] != address(rageQuitToken), "RageQuit.rageQuit: Cannot claim rageQuitToken");
 
             // Prevent same token from being claimed twice by making sure they are in order
-            if(i != 0) {
+            if (i != 0) {
                 require(uint160(_tokens[i - 1]) < uint160(_tokens[i]), "RageQuit.rageQuit: Tokens out of order");
             }
 
             IERC20 token = IERC20(_tokens[i]);
-        
+
             // calc proportional amount excluding rageQuitTokens in the vault before this tx started
-            uint256 tokenAmount =  token.balanceOf(vault) * _quitAmount / (rageQuitToken.totalSupply() - rageQuitToken.balanceOf(vault) + _quitAmount);
+            uint256 tokenAmount = (token.balanceOf(vault) * _quitAmount) /
+                (rageQuitToken.totalSupply() - rageQuitToken.balanceOf(vault) + _quitAmount);
             tokenAmounts[i] = tokenAmount;
 
             token.safeTransferFrom(vault, _msgSender(), tokenAmount);
         }
 
         emit RageQuited(_msgSender(), _quitAmount, _tokens, tokenAmounts);
-    }    
-
+    }
 }
