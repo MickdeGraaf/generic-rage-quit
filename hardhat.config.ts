@@ -5,7 +5,6 @@ import "solidity-coverage";
 
 import "./tasks/accounts";
 import "./tasks/clean";
-import "./tasks/deployers";
 
 import { resolve } from "path";
 
@@ -14,6 +13,11 @@ import { HardhatUserConfig } from "hardhat/config";
 import { NetworkUserConfig } from "hardhat/types";
 
 dotenvConfig({ path: resolve(__dirname, "./.env") });
+
+// When compiling don't import non existing artifacts
+if(!process.env.COMPILE_ONLY) {
+  require("./tasks/deployers");
+}
 
 const chainIds = {
   ganache: 1337,

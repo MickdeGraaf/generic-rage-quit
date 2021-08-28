@@ -68,7 +68,7 @@
   "scripts": {
     "clean": "hardhat clean",
     "commit": "git-cz",
-    "compile": "hardhat compile",
+    "compile": "COMPILE_ONLY=1 hardhat compile",
     "coverage": "cross-env CODE_COVERAGE=true hardhat coverage --solcoverjs ./.solcover.js --temp artifacts --testfiles \"./test/**/*.ts\"",
     "deploy": "hardhat deploy:Greeter",
     "lint": "yarn run lint:sol && yarn run lint:ts && yarn run prettier:check",
@@ -79,5 +79,8 @@
     "prettier:check": "prettier --check --config ./.prettierrc.yaml \"**/*.{js,json,md,sol,ts}\"",
     "test": "hardhat test",
     "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.3.1"
   }
 }
