@@ -1,17 +1,7 @@
-# Solidity Template
+# Generic Rage Quit
 
-My favourite setup for writing Solidity smart contracts.
-
-- [Hardhat](https://github.com/nomiclabs/hardhat): compile and run the smart contracts on a local development network
-- [TypeChain](https://github.com/ethereum-ts/TypeChain): generate TypeScript types for smart contracts
-- [Ethers](https://github.com/ethers-io/ethers.js/): renowned Ethereum library and wallet implementation
-- [Waffle](https://github.com/EthWorks/Waffle): tooling for writing comprehensive smart contract tests
-- [Solhint](https://github.com/protofire/solhint): linter
-- [Solcover](https://github.com/sc-forks/solidity-coverage): code coverage
-- [Prettier Plugin Solidity](https://github.com/prettier-solidity/prettier-plugin-solidity): code formatter
-
-This is a GitHub template, which means you can reuse it as many times as you want. You can do that by clicking the "Use this
-template" button at the top of the page.
+This contract allows any DAO to have a Rage Quit mechanism without having to modify any of its existing code.
+It is required that the DAO gov tokens are transferable and that the DAO is able to execute approvals from the contract holding its tokens.
 
 ## Usage
 
@@ -95,8 +85,16 @@ $ yarn clean
 Deploy the contracts to Hardhat Network:
 
 ```sh
-$ yarn deploy --greeting "Bonjour, le monde!"
+$ yarn deploy:rageQuit --rage-quit-token [gov token of the dao] --vault [contract holding the tokens in the treasury]
 ```
+
+Each token which should be claimable on rage quit needs to be approved from the vault to allow the rage quit contract to pull the tokens.
+
+### Integration
+
+1. Deploy contract (see above)
+2. Approve rage quitable tokens through a DAO vote to allow the rageQuit contract to spend them.
+3. To ragequit call ``rageQuit(uint256 _quitAmount, address[] calldata _tokens)`` passing the amount of tokens you want to burn and which tokens you want to claim.
 
 ## Syntax Highlighting
 
