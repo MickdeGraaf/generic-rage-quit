@@ -2,6 +2,7 @@ import "@nomiclabs/hardhat-waffle";
 import "@typechain/hardhat";
 import "hardhat-gas-reporter";
 import "solidity-coverage";
+import "@nomiclabs/hardhat-etherscan";
 
 import "./tasks/accounts";
 import "./tasks/clean";
@@ -70,7 +71,7 @@ const config: HardhatUserConfig = {
       // See https://github.com/sc-forks/solidity-coverage/issues/652
       hardfork: process.env.CODE_COVERAGE ? "berlin" : "london",
     },
-    goerli: getChainConfig("goerli"),
+    goerli: { ...getChainConfig("goerli"), minGasPrice: 20000000000},
     kovan: getChainConfig("kovan"),
     rinkeby: getChainConfig("rinkeby"),
     ropsten: getChainConfig("ropsten"),
@@ -82,7 +83,7 @@ const config: HardhatUserConfig = {
     tests: "./test",
   },
   solidity: {
-    version: "0.8.6",
+    version: "0.8.4",
     settings: {
       metadata: {
         // Not including the metadata hash
@@ -101,6 +102,9 @@ const config: HardhatUserConfig = {
     outDir: "typechain",
     target: "ethers-v5",
   },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_KEY
+  }
 };
 
 export default config;
