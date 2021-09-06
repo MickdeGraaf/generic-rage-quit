@@ -46,7 +46,7 @@ task("deploy-ragequit-dao")
         if(taskArgs.verify) {
             await token.deployed();
             await sleep(VERIFY_DELAY);
-            run("verify:verify", {
+            await run("verify:verify", {
                 address: token.address,
                 constructorArguments: [
                     taskArgs.tokenName,
@@ -65,7 +65,7 @@ task("deploy-ragequit-dao")
         if(taskArgs.verify) {
             await timelock.deployed();
             await sleep(VERIFY_DELAY);
-            run("verify:verify", {
+            await run("verify:verify", {
                 address: timelock.address,
                 constructorArguments: [
                     0,
@@ -88,7 +88,7 @@ task("deploy-ragequit-dao")
         if(taskArgs.verify) {
             await DAO.deployed();
             await sleep(VERIFY_DELAY);
-            run("verify:verify", {
+            await run("verify:verify", {
                 address: DAO.address,
                 constructorArguments: [
                     token.address,
@@ -107,7 +107,7 @@ task("deploy-ragequit-dao")
         if(taskArgs.verify) {
             await rageQuit.deployed();
             await sleep(VERIFY_DELAY);
-            run("verify:verify", {
+            await run("verify:verify", {
                 address: rageQuit.address,
                 constructorArguments: [
                     token.address,
@@ -206,12 +206,12 @@ task("deploy-test-dao")
                     `MCK${i}`,
                     initialSupply
                 ]));
-                run("verify:verify", {
+                await run("verify:verify", {
                     address: mockToken.address,
                     constructorArguments: [
                         `Mock Token ${i}`,
                         `MCK${i}`,
-                        initialSupply
+                        initialSupply.toString()
                     ]
                 });
             }
