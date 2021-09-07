@@ -3,6 +3,8 @@
 This contract allows any DAO to have a Rage Quit mechanism without having to modify any of its existing code.
 It is required that the DAO gov tokens are transferable and that the DAO is able to execute approvals from the contract holding its tokens.
 
+Development was kindly supported by [Tally](https://www.withtally.com/) ❤
+
 ## Usage
 
 ### Pre Requisites
