@@ -191,7 +191,7 @@ task("deploy-test-dao")
             // deploy mock token
             const initialSupply = parseEther(((i + 1 ) * 100000000).toString())
             const mockToken = await mockTokenFactory.deploy(
-                `Mock Token ${i}`,
+                `MockToken ${i}`,
                 `MCK${i}`,
                 initialSupply
             );
@@ -201,15 +201,15 @@ task("deploy-test-dao")
                 await mockToken.deployed();
                 await sleep(VERIFY_DELAY);
                 console.log(`MockToken deployed ${new Date().toLocaleString()}`)
-                console.log(JSON.stringify([
-                    `Mock Token ${i}`,
-                    `MCK${i}`,
-                    initialSupply
-                ]));
+                // console.log(JSON.stringify([
+                //     `MockToken ${i}`,
+                //     `MCK${i}`,
+                //     initialSupply
+                // ]));
                 await run("verify:verify", {
                     address: mockToken.address,
                     constructorArguments: [
-                        `Mock Token ${i}`,
+                        `MockToken ${i}`,
                         `MCK${i}`,
                         initialSupply.toString()
                     ]
@@ -231,6 +231,22 @@ task("deploy-test-dao")
             await mockToken.transfer(deployment.timelock.address, tokenBalance);
         }
 
+        //approve rageQuit to spend gov tokens
+        await deployment.token.approve(deployment.rageQuit.address, constants.MaxUint256);
+
         // setup permissions
         await run("setup-dao-permissions", {daoAddress: deployment.DAO.address, minDelay: taskArgs.minDelay});
+
+        const deployedContracts: any = {};
+
+        for (const contract in deployment) {
+            // @ts-ignore
+            deployedContracts[contract] = deployment[contract].address
+        }
+
+        mockTokens.map((token, index) => {
+            deployedContracts[`MockToken ${index}`] = token.address;
+        });
+
+        console.table(deployedContracts);
 });

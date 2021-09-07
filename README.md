@@ -80,6 +80,24 @@ Delete the smart contract artifacts, the coverage reports and the Hardhat cache:
 $ yarn clean
 ```
 
+### Demo deployment
+
+- Install dependencies and compile. (See above)
+- Get some ropsten ETH
+- Setup `.env` file by copying and filling in `.env.example`
+- Run `yarn deploy:testdao`
+- Wait. It takes some time
+- The contracts deployed will be logged at the end
+- Go to the rageQuit contract at: https://ropsten.etherscan.io/address/`rageQuitContractAddress`#writeContract
+- Connect with the same wallet you deployed from through MetaMask
+- Call rageQuit with the following params:
+  - _quitAmount: 1000000000000000000
+  - Order the token addresses manually. If token addresses are submitted out of order the tx will fail.
+  - _tokens: Addresses of the MockTokens formatted in this manner: ``["TOKEN_0_ADDRSSS", "TOKEN_1_ADDRSSS", "TOKEN_3_ADDRSSS", "TOKEN_4_ADDRSSS", "TOKEN_5_ADDRSSS"]
+- Witness your beautiful rageQuit tx
+
+[Example tx rageQuiting](https://ropsten.etherscan.io/tx/0x463c70727af2b9db7fee9bbf07fc735382c23a5c36e7bd3af24529003f0cf02a)
+
 ### Deploy
 
 Deploy the contracts to Hardhat Network:

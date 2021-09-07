@@ -71,10 +71,10 @@ const config: HardhatUserConfig = {
       // See https://github.com/sc-forks/solidity-coverage/issues/652
       hardfork: process.env.CODE_COVERAGE ? "berlin" : "london",
     },
-    goerli: { ...getChainConfig("goerli"), minGasPrice: 20000000000},
+    goerli: { ...getChainConfig("goerli"), gasPrice: 20000000000},
     kovan: getChainConfig("kovan"),
     rinkeby: getChainConfig("rinkeby"),
-    ropsten: getChainConfig("ropsten"),
+    ropsten: { ...getChainConfig("ropsten"),  gasPrice: 20000000000 },
   },
   paths: {
     artifacts: "./artifacts",
