@@ -21,8 +21,8 @@ contract RageQuit is ReentrancyGuard, Context {
     }
 
     function rageQuit(uint256 _quitAmount, address[] calldata _tokens) external nonReentrant {
-        // Effectively burn rageQuitTokens by pulling to null address
-        rageQuitToken.transferFrom(_msgSender(), address(0), _quitAmount);
+        // Effectively burn rageQuitTokens by pulling to 'dead' address
+        rageQuitToken.transferFrom(_msgSender(), 0x000000000000000000000000000000000000dEaD, _quitAmount);
 
         uint256[] memory tokenAmounts = new uint256[](_tokens.length);
 
