@@ -13,6 +13,7 @@ describe("RageQuit", function () {
 
   let account: SignerWithAddress;
   let vault: SignerWithAddress;
+  let burnAddress: SignerWithAddress;
   let rageQuit: RageQuit;
   let rageQuitToken: MockToken;
   const vaultTokens: MockToken[] = [];
@@ -20,7 +21,7 @@ describe("RageQuit", function () {
   const timeTraveler: TimeTraveler = new TimeTraveler(hre.network.provider);
 
   before(async () => {
-    [account, vault] = await hre.ethers.getSigners();
+    [account, vault, burnAddress] = await hre.ethers.getSigners();
 
     const mockTokenFactory = await new MockToken__factory(account);
     rageQuitToken = await mockTokenFactory.deploy("RQT", "RageQuit token", INITIAL_RQT_SUPPLY);
@@ -50,7 +51,7 @@ describe("RageQuit", function () {
       return 1;
     });
 
-    rageQuit = await new RageQuit__factory(account).deploy(rageQuitToken.address, vault.address);
+    rageQuit = await new RageQuit__factory(account).deploy(rageQuitToken.address, vault.address, burnAddress.address);
     // approve ragequit contract to pull RQT token from account
     await rageQuitToken.approve(rageQuit.address, constants.MaxUint256);
 
@@ -78,10 +79,10 @@ describe("RageQuit", function () {
     }
 
     const accountRqtBalance = await rageQuitToken.balanceOf(account.address);
-    const vaultRqtBalance = await rageQuitToken.balanceOf(vault.address);
+    const burnRqtBalance = await rageQuitToken.balanceOf(burnAddress.address);
 
     expect(accountRqtBalance).to.eq(0);
-    expect(vaultRqtBalance).to.eq(INITIAL_RQT_SUPPLY);
+    expect(burnRqtBalance).to.eq(INITIAL_RQT_SUPPLY);
   });
 
   it("Partial rage quit should work", async () => {
@@ -96,10 +97,10 @@ describe("RageQuit", function () {
     }
 
     const accountRqtBalance = await rageQuitToken.balanceOf(account.address);
-    const vaultRqtBalance = await rageQuitToken.balanceOf(vault.address);
+    const burnRqtBalance = await rageQuitToken.balanceOf(burnAddress.address);
 
     expect(accountRqtBalance).to.eq(INITIAL_RQT_SUPPLY.div(2));
-    expect(vaultRqtBalance).to.eq(INITIAL_RQT_SUPPLY.div(2));
+    expect(burnRqtBalance).to.eq(INITIAL_RQT_SUPPLY.div(2));
   });
 
   it("Rage quitting ignoring some tokens should work", async () => {
@@ -120,10 +121,10 @@ describe("RageQuit", function () {
     }
 
     const accountRqtBalance = await rageQuitToken.balanceOf(account.address);
-    const vaultRqtBalance = await rageQuitToken.balanceOf(vault.address);
+    const burnRqtBalance = await rageQuitToken.balanceOf(burnAddress.address);
 
     expect(accountRqtBalance).to.eq(0);
-    expect(vaultRqtBalance).to.eq(INITIAL_RQT_SUPPLY);
+    expect(burnRqtBalance).to.eq(INITIAL_RQT_SUPPLY);
 
     const accountIgnoredTokenBalance = await ignoredToken.balanceOf(account.address);
     const vaultIgnoredTokenBalance = await ignoredToken.balanceOf(vault.address);
@@ -147,10 +148,10 @@ describe("RageQuit", function () {
     }
 
     const accountRqtBalance = await rageQuitToken.balanceOf(account.address);
-    const vaultRqtBalance = await rageQuitToken.balanceOf(vault.address);
+    const burnRqtBalance = await rageQuitToken.balanceOf(burnAddress.address);
 
     expect(accountRqtBalance).to.eq(0);
-    expect(vaultRqtBalance).to.eq(INITIAL_RQT_SUPPLY);
+    expect(burnRqtBalance).to.eq(INITIAL_RQT_SUPPLY);
   });
 
   it("Trying to rage quit a token twice should fail", async () => {
