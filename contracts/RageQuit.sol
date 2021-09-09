@@ -13,7 +13,7 @@ contract RageQuit is ReentrancyGuard, Context {
     IERC20 public immutable rageQuitToken; // gov token to burn
     address public immutable vault; // address of the vault where the tokens should be pulled from
 
-    event RageQuited(address indexed leaver, uint256 indexed quitAmount, address[] tokens, uint256[] amounts);
+    event RageQuitted(address indexed leaver, uint256 indexed quitAmount, address[] tokens, uint256[] amounts);
 
     constructor(address _rageQuitToken, address _vault) {
         rageQuitToken = IERC20(_rageQuitToken);
@@ -44,6 +44,6 @@ contract RageQuit is ReentrancyGuard, Context {
             token.safeTransferFrom(vault, _msgSender(), tokenAmount);
         }
 
-        emit RageQuited(_msgSender(), _quitAmount, _tokens, tokenAmounts);
+        emit RageQuitted(_msgSender(), _quitAmount, _tokens, tokenAmounts);
     }
 }
