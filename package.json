@@ -78,7 +78,7 @@
     "prettier:check": "prettier --check --config ./.prettierrc.yaml \"**/*.{js,json,md,sol,ts}\"",
     "test": "hardhat test",
     "typechain": "cross-env TS_NODE_TRANSPILE_ONLY=true hardhat typechain",
-    "deploy:testdao": " TS_NODE_TRANSPILE_ONLY=1 npx hardhat deploy-test-dao --token-name TESTDAO --token-symbol TDAO --initial-supply 100000000 --dao-name TESTDAO --min-delay 86400 --voting-period 45818 --voting-delay 360 --mock-token-count 4 --network ropsten --verify"
+    "deploy:testdao": " TS_NODE_TRANSPILE_ONLY=1 npx hardhat deploy-test-dao --token-name TESTDAO --token-symbol TDAO --initial-supply 100000000 --dao-name TESTDAO --min-delay 86400 --voting-period 45818 --voting-delay 360 --mock-token-count 4 --burn-address 0x000000000000000000000000000000000000dEaD --verify --network ropsten"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^4.3.1"

@@ -37,6 +37,7 @@ task("deploy-ragequit-dao")
     .addParam("minDelay", "delay in blocks between creation of a proposal and voting start")
     .addParam("votingDelay", "delay in blocks between proposal and voting start")
     .addParam("votingPeriod", "seconds a proposal is open for voting")
+    .addParam("burnAddress", "address to send burned tokens to")
     .addFlag("verify")
     .setAction(async(taskArgs: TaskArguments, { ethers, run }): Promise<DAODeployment> => {
         const signers = await ethers.getSigners()
@@ -102,7 +103,7 @@ task("deploy-ragequit-dao")
 
         // deploy rageQuit
         console.log("deploying rageQuit");
-        const rageQuit = await new RageQuit__factory(signers[0]).deploy(token.address, timelock.address);
+        const rageQuit = await new RageQuit__factory(signers[0]).deploy(token.address, timelock.address, taskArgs.burnAddress);
         console.log(`deployed rageQuit at: ${rageQuit.address}`)
         if(taskArgs.verify) {
             await rageQuit.deployed();
@@ -178,6 +179,7 @@ task("deploy-test-dao")
     .addParam("votingPeriod", "seconds a proposal is open for voting")
     .addParam("votingDelay", "delay in blocks between proposal and voting start")
     .addParam("mockTokenCount", "number of mock tokens to deploy")
+    .addParam("burnAddress", "address to send burned tokens to")
     .addFlag("verify")
     .setAction(async(taskArgs: TaskArguments, { ethers, run }) => {
         const signers = await ethers.getSigners();

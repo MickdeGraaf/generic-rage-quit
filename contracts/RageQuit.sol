@@ -12,17 +12,18 @@ contract RageQuit is ReentrancyGuard, Context {
 
     IERC20 public immutable rageQuitToken; // gov token to burn
     address public immutable vault; // address of the vault where the tokens should be pulled from
+    address public immutable burnAddress; // address where the rage quitted gov tokens are send to
 
-    event RageQuited(address indexed leaver, uint256 indexed quitAmount, address[] tokens, uint256[] amounts);
+    event RageQuitted(address indexed leaver, uint256 indexed quitAmount, address[] tokens, uint256[] amounts);
 
-    constructor(address _rageQuitToken, address _vault) {
+    constructor(address _rageQuitToken, address _vault, address _burnAddress) {
         rageQuitToken = IERC20(_rageQuitToken);
         vault = _vault;
+        burnAddress = _burnAddress;
     }
 
     function rageQuit(uint256 _quitAmount, address[] calldata _tokens) external nonReentrant {
-        // TODO burn tokens (or transfer them to 0x000....0 address)
-        rageQuitToken.transferFrom(_msgSender(), vault, _quitAmount);
+        rageQuitToken.transferFrom(_msgSender(), burnAddress, _quitAmount);
 
         uint256[] memory tokenAmounts = new uint256[](_tokens.length);
 
@@ -38,12 +39,12 @@ contract RageQuit is ReentrancyGuard, Context {
 
             // calc proportional amount excluding rageQuitTokens in the vault before this tx started
             uint256 tokenAmount = (token.balanceOf(vault) * _quitAmount) /
-                (rageQuitToken.totalSupply() - rageQuitToken.balanceOf(vault) + _quitAmount);
+                (rageQuitToken.totalSupply() - rageQuitToken.balanceOf(vault) - rageQuitToken.balanceOf(burnAddress) + _quitAmount);
             tokenAmounts[i] = tokenAmount;
 
             token.safeTransferFrom(vault, _msgSender(), tokenAmount);
         }
 
-        emit RageQuited(_msgSender(), _quitAmount, _tokens, tokenAmounts);
+        emit RageQuitted(_msgSender(), _quitAmount, _tokens, tokenAmounts);
     }
 }
